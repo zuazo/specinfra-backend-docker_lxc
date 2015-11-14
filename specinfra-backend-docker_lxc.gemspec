@@ -6,7 +6,7 @@
 
 Gem::Specification.new do |s|
   s.name = 'specinfra-backend-docker_lxc'
-  s.version = '0.1.0'
+  s.version = '0.2.0.dev'
   s.date = '2015-11-14'
   s.platform = Gem::Platform::RUBY
   s.summary = 'Specinfra Docker LXC Backend'
