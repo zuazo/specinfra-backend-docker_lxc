@@ -18,5 +18,17 @@
 #
 
 class DisabledDockerLxc < Specinfra::Backend::DockerLxc
-  def initialize(*args); end
+  class Example
+    attr_accessor :metadata
+
+    def initialize
+      @metadata = {}
+    end
+  end
+
+  attr_accessor :example
+
+  def initialize(*_args)
+    @example = Example.new
+  end
 end

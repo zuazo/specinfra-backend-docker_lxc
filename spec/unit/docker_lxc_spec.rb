@@ -75,35 +75,42 @@ describe Specinfra::Backend::DockerLxc do
   end
 
   context '#erroneous_result' do
+    let(:cmd) { %w(lxc-attach -al) }
     let(:exception_msg) { 'My Exception message' }
     let(:backtrace) { ['Backtrace message'] }
     let(:exception) do
       Exception.new(exception_msg).tap { |e| e.set_backtrace(backtrace) }
     end
 
+    it 'calls #rspec_example_metadata' do
+      expect(subject).to receive(:rspec_example_metadata)
+        .with(cmd, 'stdout', 'stderr').once
+      subject.send(:erroneous_result, cmd, exception, 'stdout', 'stderr', 0)
+    end
+
     it 'returns a CommandResult object ' do
       expect(
-        subject.send(:erroneous_result, exception, 'stdout', 'stderr', 25)
+        subject.send(:erroneous_result, cmd, exception, 'stdout', 'stderr', 25)
       ).to be_a CommandResult
     end
 
     it 'returns the correct stdout' do
       expect(
-        subject.send(:erroneous_result, exception, 'stdout', 'stderr', 25)
+        subject.send(:erroneous_result, cmd, exception, 'stdout', 'stderr', 25)
         .stdout
       ).to eq 'stdout'
     end
 
     it 'returns the correct stderr' do
       expect(
-        subject.send(:erroneous_result, exception, 'stdout', 'stderr', 25)
+        subject.send(:erroneous_result, cmd, exception, 'stdout', 'stderr', 25)
         .stderr
       ).to eq 'stderr'
     end
 
     it 'returns the correct status' do
       expect(
-        subject.send(:erroneous_result, exception, 'stdout', 'stderr', 25)
+        subject.send(:erroneous_result, cmd, exception, 'stdout', 'stderr', 25)
         .exit_status
       ).to eq 25
     end
@@ -111,14 +118,14 @@ describe Specinfra::Backend::DockerLxc do
     context 'when stderr is empty' do
       it 'returns the exception message' do
         expect(
-          subject.send(:erroneous_result, exception, 'stdout', nil, 25)
+          subject.send(:erroneous_result, cmd, exception, 'stdout', nil, 25)
           .stderr
         ).to match Regexp.new(exception_msg)
       end
 
       it 'returns the backtrace' do
         expect(
-          subject.send(:erroneous_result, exception, 'stdout', nil, 25)
+          subject.send(:erroneous_result, cmd, exception, 'stdout', nil, 25)
           .stderr
         ).to match Regexp.new(backtrace.join("\n"))
       end
@@ -127,9 +134,47 @@ describe Specinfra::Backend::DockerLxc do
     context 'when exit status is 0' do
       it 'returns 1' do
         expect(
-          subject.send(:erroneous_result, exception, 'stdout', 'stderr', 0)
+          subject.send(:erroneous_result, cmd, exception, 'stdout', 'stderr', 0)
           .exit_status
         ).to eq 1
+      end
+    end
+  end
+
+  context '#rspec_example_metadata' do
+    it 'sets command on metadata' do
+      subject.send(:rspec_example_metadata, %w(cmd -l), 'stdout', 'stderr')
+      expect(subject.example.metadata[:command]).to eq 'cmd -l'
+    end
+
+    it 'calls #escape_command to escape the command' do
+      expect(subject).to receive(:escape_command).with(%w(cmd -l)).once
+        .and_return('escape command')
+      subject.send(:rspec_example_metadata, %w(cmd -l), 'stdout', 'stderr')
+      expect(subject.example.metadata[:command]).to eq 'escape command'
+    end
+
+    it 'sets stdout on metadata' do
+      subject.send(:rspec_example_metadata, %w(cmd -l), 'stdout', 'stderr')
+      expect(subject.example.metadata[:stdout]).to eq 'stdout'
+    end
+
+    it 'sets stderr on metadata' do
+      subject.send(:rspec_example_metadata, %w(cmd -l), 'stdout', 'stderr')
+      expect(subject.example.metadata[:stderr]).to eq 'stderr'
+    end
+
+    context 'without @example variable' do
+      before { subject.example = nil }
+
+      it 'does not change @example' do
+        subject.send(:rspec_example_metadata, %w(cmd -l), 'stdout', 'stderr')
+        expect(subject.example).to be_nil
+      end
+
+      it 'does not call #escape_command' do
+        expect(subject).to receive(:escape_command).never
+        subject.send(:rspec_example_metadata, %w(cmd -l), 'stdout', 'stderr')
       end
     end
   end
@@ -170,6 +215,12 @@ describe Specinfra::Backend::DockerLxc do
     it 'calls #lxc_attach_result_assert' do
       expect(subject).to receive(:lxc_attach_result_assert)
         .with(stderr, exit_status).once
+      subject.send(:docker_run!, cmd)
+    end
+
+    it 'calls #rspec_example_metadata' do
+      expect(subject).to receive(:rspec_example_metadata)
+        .with(cmd, stdout, stderr).once
       subject.send(:docker_run!, cmd)
     end
 
@@ -214,7 +265,7 @@ describe Specinfra::Backend::DockerLxc do
 
       it 'calls #erroneous_result' do
         expect(subject).to receive(:erroneous_result).once
-          .with(exception, stdout, stderr, exit_status)
+          .with(cmd, exception, stdout, stderr, exit_status)
         subject.send(:docker_run!, cmd)
       end
 

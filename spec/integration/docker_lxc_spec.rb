@@ -69,6 +69,22 @@ describe Specinfra::Backend::DockerLxc do
       expect(subject.send(:docker_run!, cmd).exit_status).to eq status
     end
 
+    context 'rspec metadata' do
+      before { subject.send(:docker_run!, cmd) }
+
+      it 'sets command' do
+        expect(subject.example.metadata[:command]).to eq cmd
+      end
+
+      it 'sets stdout' do
+        expect(subject.example.metadata[:stdout]).to eq stdout_str
+      end
+
+      it 'sets stderr' do
+        expect(subject.example.metadata[:stderr]).to eq stderr_str
+      end
+    end
+
     context 'with lxc-attach failures' do
       let(:stderr_str) { 'lxc-attach: failed to get the init pid' }
       let(:status) { 1 }

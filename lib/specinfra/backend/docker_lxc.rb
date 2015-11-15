@@ -59,11 +59,29 @@ module Specinfra
       # @param stderr [String] the *stderr* output.
       # @param status [Fixnum] the command exit status.
       # @return [Specinfra::CommandResult] the generated result object.
-      def erroneous_result(exception, stdout, stderr, status)
+      def erroneous_result(cmd, exception, stdout, stderr, status)
         err =
-          stderr.nil? ? ([exception.message] + exception.backtrace) : [stderr]
+          if stderr.nil?
+            [exception.message] + exception.backtrace
+          else
+            [stderr]
+          end
         sta = status.is_a?(Fixnum) && status != 0 ? status : 1
+        rspec_example_metadata(cmd, stdout, err.join)
         CommandResult.new(stdout: stdout, stderr: err.join, exit_status: sta)
+      end
+
+      # Updates RSpec metadata used by Serverspec.
+      #
+      # @param cmd [Array<String>, String] the command (without `lxc-attach`).
+      # @param stdout [String] the *stdout* output.
+      # @param stderr [String] the *stderr* output.
+      # @return nil
+      def rspec_example_metadata(cmd, stdout, stderr)
+        return unless @example
+        @example.metadata[:command] = escape_command(cmd)
+        @example.metadata[:stdout] = stdout
+        @example.metadata[:stderr] = stderr
       end
 
       # Runs a command inside a Docker container.
@@ -74,12 +92,13 @@ module Specinfra
       def docker_run!(cmd, opts = {})
         stdout, stderr, status = shell_command!(lxc_attach_command(cmd), opts)
         lxc_attach_result_assert(stderr, status)
+        rspec_example_metadata(cmd, stdout, stderr)
         CommandResult.new(stdout: stdout, stderr: stderr, exit_status: status)
       rescue LxcAttachError
         raise
       rescue => e
         @container.kill
-        erroneous_result(e, stdout, stderr, status)
+        erroneous_result(cmd, e, stdout, stderr, status)
       end
     end
   end
