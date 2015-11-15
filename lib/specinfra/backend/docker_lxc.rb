@@ -74,9 +74,7 @@ module Specinfra
       def docker_run!(cmd, opts = {})
         stdout, stderr, status = shell_command!(lxc_attach_command(cmd), opts)
         lxc_attach_result_assert(stderr, status)
-        CommandResult.new(
-          stdout: stdout, stderr: stderr, exit_status: status
-        )
+        CommandResult.new(stdout: stdout, stderr: stderr, exit_status: status)
       rescue LxcAttachError
         raise
       rescue => e

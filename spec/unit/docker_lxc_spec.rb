@@ -31,8 +31,7 @@ describe Specinfra::Backend::DockerLxc do
     it 'returns the correct lxc-attach command' do
       cmd =
         ['lxc-attach', '-n', container_id, '--', 'sh', '-c', 'echo Hello World']
-      expect(subject.send(:lxc_attach_command, 'echo Hello World'))
-        .to eq cmd
+      expect(subject.send(:lxc_attach_command, 'echo Hello World')).to eq cmd
     end
   end
 
