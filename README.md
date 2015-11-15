@@ -7,7 +7,7 @@
 [![Coverage Status](http://img.shields.io/coveralls/zuazo/specinfra-backend-docker_lxc.svg?style=flat)](https://coveralls.io/r/zuazo/specinfra-backend-docker_lxc?branch=master)
 [![Inline docs](http://inch-ci.org/github/zuazo/specinfra-backend-docker_lxc.svg?branch=master&style=flat)](http://inch-ci.org/github/zuazo/specinfra-backend-docker_lxc)
 
-[Serverspec](http://serverspec.org/)/[Specinfra](https://github.com/mizzy/specinfra) backend for Docker LXC execution driver.
+[Serverspec](http://serverspec.org/) / [Specinfra](https://github.com/mizzy/specinfra) backend for Docker LXC execution driver.
 
 ## Requirements
 

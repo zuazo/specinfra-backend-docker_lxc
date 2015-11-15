@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.platform = Gem::Platform::RUBY
   s.summary = 'Specinfra Docker LXC Backend'
   s.description =
-    'Serverspec/Specinfra backend for Docker LXC execution driver.'
+    'Serverspec / Specinfra backend for Docker LXC execution driver.'
   s.license = 'Apache-2.0'
   s.authors = %(Xabier de Zuazo)
   s.email = 'xabier@zuazo.org'
