@@ -3,8 +3,8 @@
 [![Dependency Status](http://img.shields.io/gemnasium/zuazo/specinfra-backend-docker_lxc.svg?style=flat)](https://gemnasium.com/zuazo/specinfra-backend-docker_lxc)
 [![Code Climate](http://img.shields.io/codeclimate/github/zuazo/specinfra-backend-docker_lxc.svg?style=flat)](https://codeclimate.com/github/zuazo/specinfra-backend-docker_lxc)
 [![Circle CI](https://circleci.com/gh/zuazo/specinfra-backend-docker_lxc/tree/master.svg?style=shield)](https://circleci.com/gh/zuazo/specinfra-backend-docker_lxc/tree/master)
-[![Travis CI](http://img.shields.io/travis/zuazo/specinfra-backend-docker_lxc/0.2.0.svg?style=flat)](https://travis-ci.org/zuazo/specinfra-backend-docker_lxc)
-[![Coverage Status](http://img.shields.io/coveralls/zuazo/specinfra-backend-docker_lxc/0.2.0.svg?style=flat)](https://coveralls.io/r/zuazo/specinfra-backend-docker_lxc?branch=0.2.0)
+[![Travis CI](http://img.shields.io/travis/zuazo/specinfra-backend-docker_lxc.svg?style=flat)](https://travis-ci.org/zuazo/specinfra-backend-docker_lxc)
+[![Coverage Status](http://img.shields.io/coveralls/zuazo/specinfra-backend-docker_lxc.svg?style=flat)](https://coveralls.io/r/zuazo/specinfra-backend-docker_lxc?branch=master)
 [![Inline docs](http://inch-ci.org/github/zuazo/specinfra-backend-docker_lxc.svg?branch=master&style=flat)](http://inch-ci.org/github/zuazo/specinfra-backend-docker_lxc)
 
 [Serverspec](http://serverspec.org/) / [Specinfra](https://github.com/mizzy/specinfra) backend for Docker LXC execution driver.
