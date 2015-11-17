@@ -59,6 +59,7 @@ module Specinfra
       # @param stderr [String] the *stderr* output.
       # @param status [Fixnum] the command exit status.
       # @return [Specinfra::CommandResult] the generated result object.
+      # @api public
       def erroneous_result(cmd, exception, stdout, stderr, status)
         err =
           if stderr.nil?
@@ -77,6 +78,7 @@ module Specinfra
       # @param stdout [String] the *stdout* output.
       # @param stderr [String] the *stderr* output.
       # @return nil
+      # @api public
       def rspec_example_metadata(cmd, stdout, stderr)
         return unless @example
         @example.metadata[:command] = escape_command(cmd)
@@ -89,6 +91,7 @@ module Specinfra
       # @param cmd [String] the command to run.
       # @param opts [Hash] options to pass to {Open3.popen3}.
       # @return [Specinfra::CommandResult] the result.
+      # @api public
       def docker_run!(cmd, opts = {})
         stdout, stderr, status = shell_command!(lxc_attach_command(cmd), opts)
         lxc_attach_result_assert(stderr, status)

@@ -155,6 +155,7 @@ module Specinfra
         #   escape_command(['sudo', '-p', 'Password: ')
         #     #=> "sudo -p Password:\\ "
         #   escape_command('uname -a') #=> "uname -a"
+        # @api public
         def escape_command(cmd)
           return cmd if cmd.is_a?(String)
           cmd.shelljoin
