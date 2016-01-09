@@ -55,6 +55,7 @@ module Specinfra
       # Parses a rescued exception and returns the command result.
       #
       # @param exception [Exception] the exception to parse.
+      # @param cmd [Array<String>, String] the command (without `lxc-attach`).
       # @param stdout [String] the *stdout* output.
       # @param stderr [String] the *stderr* output.
       # @param status [Fixnum] the command exit status.
